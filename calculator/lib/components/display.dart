@@ -1,11 +1,13 @@
 
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors
 
 import 'package:calculator/components/my_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:provider/provider.dart';
 
 import '../models/digits.dart';
+import '../theme/theme_provider.dart';
 import 'my_area.dart';
 
 class Display extends StatefulWidget {
@@ -18,9 +20,10 @@ class Display extends StatefulWidget {
 class _DisplayState extends State<Display> {
   var computingText = '';
   var resultsText = '';
-
+  
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     Color? textColor;
     return Expanded(
       child: Column(
@@ -37,14 +40,22 @@ class _DisplayState extends State<Display> {
             ),
           ),
           Expanded(
-            flex: 2,
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                child: MyLayout(
-                    computeText: computeText,
-                    resultsText: resultsText,
-                    computingText: computingText)),
-          ),
+              flex: 2,
+              child: Container(
+                 decoration: BoxDecoration(
+               borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+              color: (themeProvider.isDarkMode) ? const Color.fromARGB(255, 24, 20, 20) : const Color.fromARGB(255, 243, 240, 240)
+            ),
+            padding: const EdgeInsets.all(12),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                    child: MyLayout(
+                        computeText: computeText,
+                        resultsText: resultsText,
+                        computingText: computingText)),
+              ),
+            ),
+          
         ],
       ),
     );
@@ -90,11 +101,11 @@ class _DisplayState extends State<Display> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text("ERROR!"),
+        title: const Text("ERROR!"),
         content: Text(errorMessage),
         actions: <Widget>[
           TextButton(
-            child: Text('OK'),
+            child: const Text('OK'),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
